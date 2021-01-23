@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 07, 2020 at 06:26 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.5
+-- Waktu pembuatan: 23 Jan 2021 pada 02.58
+-- Versi server: 10.4.14-MariaDB
+-- Versi PHP: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,68 +24,230 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_barang`
+-- Struktur dari tabel `barang`
 --
 
-CREATE TABLE `tbl_barang` (
+CREATE TABLE `barang` (
   `id_barang` int(11) NOT NULL,
+  `nama_barang` varchar(255) NOT NULL,
   `id_jenis` int(11) NOT NULL,
-  `nama_barang` varchar(30) NOT NULL,
   `harga` float NOT NULL,
   `stok` int(11) NOT NULL,
   `expired` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `barang`
+--
+
+INSERT INTO `barang` (`id_barang`, `nama_barang`, `id_jenis`, `harga`, `stok`, `expired`) VALUES
+(1, 'ab', 2, 3, 3, '2021-01-23'),
+(2, 'Ciciii', 3, 100000000000000, 1, '2021-01-20');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_jenis_barang`
+-- Struktur dari tabel `detail_transaksi`
 --
 
-CREATE TABLE `tbl_jenis_barang` (
-  `id_jenis` int(11) NOT NULL,
-  `nama_jenis` varchar(30) NOT NULL
+CREATE TABLE `detail_transaksi` (
+  `no_transaksi` int(11) NOT NULL,
+  `id_barang` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `total_harga` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbl_jenis_barang`
+-- Dumping data untuk tabel `detail_transaksi`
 --
 
-INSERT INTO `tbl_jenis_barang` (`id_jenis`, `nama_jenis`) VALUES
-(1, 'pasta gigi'),
-(2, 'makanan');
+INSERT INTO `detail_transaksi` (`no_transaksi`, `id_barang`, `jumlah`, `total_harga`) VALUES
+(1, 1, 5, 15),
+(2, 1, 3, 9),
+(3, 2, 1, 100000000000000);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `hutang`
+--
+
+CREATE TABLE `hutang` (
+  `id_hutang` int(11) NOT NULL,
+  `no_transaksi` int(11) NOT NULL,
+  `jml_hutang` float NOT NULL,
+  `sisa_hutang` float NOT NULL,
+  `tgl_melunasi` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `jenis_barang`
+--
+
+CREATE TABLE `jenis_barang` (
+  `id_jenis` int(11) NOT NULL,
+  `nama_jenis` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `jenis_barang`
+--
+
+INSERT INTO `jenis_barang` (`id_jenis`, `nama_jenis`) VALUES
+(2, 'a'),
+(3, 'Gemoy');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `owner`
+--
+
+CREATE TABLE `owner` (
+  `id_user` int(11) NOT NULL,
+  `username` varchar(25) NOT NULL,
+  `password` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `owner`
+--
+
+INSERT INTO `owner` (`id_user`, `username`, `password`) VALUES
+(1, 'admin', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `pelanggan`
+--
+
+CREATE TABLE `pelanggan` (
+  `id_pelanggan` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nama_plg` varchar(255) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `no_telp` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `pelanggan`
+--
+
+INSERT INTO `pelanggan` (`id_pelanggan`, `id_user`, `nama_plg`, `alamat`, `no_telp`) VALUES
+(1, 1, 'a3', '3', '3');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi`
+--
+
+CREATE TABLE `transaksi` (
+  `no_transaksi` int(11) NOT NULL,
+  `id_pelanggan` int(11) NOT NULL,
+  `id_hutang` int(11) NOT NULL,
+  `tgl_transaksi` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `total_harga` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `transaksi`
+--
+
+INSERT INTO `transaksi` (`no_transaksi`, `id_pelanggan`, `id_hutang`, `tgl_transaksi`, `total_harga`) VALUES
+(1, 1, 0, '2021-01-20 02:25:31', 15),
+(2, 1, 0, '2021-01-20 02:38:06', 9),
+(3, 1, 0, '2021-01-20 07:38:34', 100000000000000);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `tbl_barang`
+-- Indeks untuk tabel `barang`
 --
-ALTER TABLE `tbl_barang`
+ALTER TABLE `barang`
   ADD PRIMARY KEY (`id_barang`);
 
 --
--- Indexes for table `tbl_jenis_barang`
+-- Indeks untuk tabel `detail_transaksi`
 --
-ALTER TABLE `tbl_jenis_barang`
+ALTER TABLE `detail_transaksi`
+  ADD PRIMARY KEY (`no_transaksi`);
+
+--
+-- Indeks untuk tabel `hutang`
+--
+ALTER TABLE `hutang`
+  ADD PRIMARY KEY (`id_hutang`);
+
+--
+-- Indeks untuk tabel `jenis_barang`
+--
+ALTER TABLE `jenis_barang`
   ADD PRIMARY KEY (`id_jenis`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indeks untuk tabel `owner`
+--
+ALTER TABLE `owner`
+  ADD PRIMARY KEY (`id_user`);
+
+--
+-- Indeks untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  ADD PRIMARY KEY (`id_pelanggan`);
+
+--
+-- Indeks untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD PRIMARY KEY (`no_transaksi`);
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `tbl_barang`
+-- AUTO_INCREMENT untuk tabel `barang`
 --
-ALTER TABLE `tbl_barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `barang`
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tbl_jenis_barang`
+-- AUTO_INCREMENT untuk tabel `hutang`
 --
-ALTER TABLE `tbl_jenis_barang`
-  MODIFY `id_jenis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `hutang`
+  MODIFY `id_hutang` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `jenis_barang`
+--
+ALTER TABLE `jenis_barang`
+  MODIFY `id_jenis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `owner`
+--
+ALTER TABLE `owner`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  MODIFY `no_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

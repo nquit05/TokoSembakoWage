@@ -78,7 +78,8 @@ class Admin extends CI_Controller
 	}
 
 	// Barang ----------------------------------------------------------------
-
+	function tes()
+	{ }
 	public function barang()
 	{
 

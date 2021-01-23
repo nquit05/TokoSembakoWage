@@ -65,7 +65,7 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class=" fa fa-user fa-fw"></i><?= $this->session->userdata('USERNAME') ?></a>
+                        <li><a href="<?= base_url() ?>admin/user_logout"><i class="fa fa-user fa-fw"></i><?= $this->session->userdata('USERNAME') ?></a>
                         <li><a href="<?= base_url() ?>admin/user_logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>

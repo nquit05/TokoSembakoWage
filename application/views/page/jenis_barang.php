@@ -40,7 +40,8 @@
 								<td><?= $row->id_jenis ?></td>
 								<td><?= $row->nama_jenis ?></td>
 								<td><?= $this->session->userdata('USERNAME') ?></td>
-								<td><button class="btn btn-default btn-sm item-edit" data="<?= $row->id_jenis ?>"><span class="fa fa-edit"></span> Edit </button> &nbsp
+								<td>
+									<button class="btn btn-default btn-sm item-edit" data="<?= $row->id_jenis ?>"><span class="fa fa-edit"></span> Edit </button> &nbsp
 									<button class="btn btn-danger btn-sm item-delete" data="<?= $row->id_jenis ?>"><span class="fa fa-trash"></span> Delete</button></td>
 							</tr>
 
